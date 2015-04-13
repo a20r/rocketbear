@@ -41,7 +41,7 @@ class ConstraintGraph(object):
         return self.arc_dict[(i, j)]
 
     def has_arc(self, i, j):
-        return self.arc_dict.has_key((i, j))
+        return (i, j) in self.arc_dict
 
     def solve(self):
         n_graph = copy.deepcopy(self)
@@ -76,10 +76,31 @@ class ConstraintGraph(object):
                     res = self.__forward_checking(depth + 1, graph)
                     if res:
                         return res
-                    else:
-                        graph = last_graph
-            else:
-                graph = last_graph
+            graph = last_graph
+
+    def __forward_checking_2way(self, depth, graph):
+        for d in graph[depth].get_pruned_domain():
+            if not graph[depth].check_constraints(d):
+                continue
+
+            last_graph = copy.deepcopy(graph)
+            graph[depth].assign(d)
+            consistent = True
+            for future in xrange(depth + 1, len(graph)):
+                if graph.has_arc(graph[future], graph[depth]):
+                    vs = [graph[future], graph[depth]]
+                    consistent = graph.get_arc(*vs).revise()
+                if not consistent:
+                    break
+
+            if consistent:
+                if depth == len(graph) - 1:
+                    return graph
+                else:
+                    res = self.__forward_checking(depth + 1, graph)
+                    if res:
+                        return res
+            graph = last_graph
 
     def __getitem__(self, i):
         return self.variables[i]
