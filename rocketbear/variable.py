@@ -45,6 +45,9 @@ class Variable(object):
         self.pruned_domain = pd
         return self
 
+    def is_assigned(self):
+        return not self.value is None
+
     def assign(self, v):
         self.value = v
         return self

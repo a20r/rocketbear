@@ -1,6 +1,5 @@
 
 import variable
-import graph
 
 
 class GraphColouringInstance(object):
@@ -27,6 +26,7 @@ class GraphColouringInstance(object):
 
         self.edges[i].add(j)
         self.edges[j].add(i)
+        return self
 
     def has_edge(self, i, j):
         return i in self.edges and j in self.edges[i]
@@ -34,25 +34,25 @@ class GraphColouringInstance(object):
     def has_node(self, i):
         return i in self.nodes
 
-    def get_constraint_graph(self, max_colouring):
+    def get_constraint_graph(self, max_colouring, heuristic):
         vs = list()
         var_dict = dict()
         for i in self.nodes:
-            v = variable.Variable(range(self.degree(i) + 1), name=i)
+            v = variable.Variable(range(max_colouring), name=i)
             v.add_constraint(lambda x: x < max_colouring)
             var_dict[i] = v
             vs.append(v)
 
         neq = lambda a, b: a != b
-        cg = graph.ConstraintGraph(vs, ordering="accending_domain")
+        cg = heuristic(vs)
         for i in self.nodes:
             for j in self.edges[i]:
                 cg.add_constraint(var_dict[i], var_dict[j], neq)
 
         return cg
 
-    def colour(self, max_colouring):
-        cg = self.get_constraint_graph(max_colouring)
+    def colour(self, max_colouring, heuristic):
+        cg = self.get_constraint_graph(max_colouring, heuristic)
         return cg.solve()
 
     @staticmethod

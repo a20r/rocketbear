@@ -15,7 +15,7 @@ if __name__ == "__main__":
     var_0.add_constraint(lambda x: x > 1)
 
     variables = [var_1, var_2, var_0]
-    g = rocketbear.ConstraintGraph(variables, ordering="accending_domain")
+    g = rocketbear.DynamicSmallestDomainFirst(variables)
 
     # Binary constraints
     g.add_constraint(var_0, var_1, lambda i, j: i <= j)
