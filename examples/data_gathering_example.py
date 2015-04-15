@@ -43,6 +43,13 @@ if __name__ == "__main__":
     print "NN:", sol.get_num_nodes()
     print "NB:", sol.get_num_backtracks(), "\n"
 
+    sol = g.colour(optimal_colouring, rocketbear.DynamicDomOverDeg)
+    print "Heuristic: Dynamic Dom Over Deg"
+    print "Time:", sol.get_time_taken()
+    print "NA:", sol.get_num_assigned()
+    print "NN:", sol.get_num_nodes()
+    print "NB:", sol.get_num_backtracks(), "\n"
+
     sol = g.colour(optimal_colouring, rocketbear.DynamicMostArcsFirst)
     print "Heuristic: Dynamic Most Arcs First"
     print "Time:", sol.get_time_taken()

@@ -66,6 +66,15 @@ class ConstraintGraph(object):
 
         return self
 
+    def minimizing(self, k):
+        """
+        All variables have to be less than k
+        """
+        for vbl in self.variables:
+            vbl.add_constraint(lambda v: v < k)
+
+        return self
+
     def get_arc(self, i, j):
         """
         Gets the arc representation between two variables

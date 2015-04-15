@@ -6,6 +6,19 @@ This file contains multiple heuristics that can be used for static and
 dynamic variable orderings
 """
 
+
+class DynamicDomOverDeg(graph.ConstraintGraph):
+    """
+    Dynamic ordering using the pruned domain over the degree
+    """
+
+    def ordering(self, v):
+        """
+        Returns the evaluation used for ordering for a node
+        """
+        return len(v.get_pruned_domain()) / len(self.edges[v])
+
+
 class DynamicSmallestDomainFirst(graph.ConstraintGraph):
     """
     Dynamic ordering where the variable with the currently smallest
@@ -67,5 +80,6 @@ orders = {
     "dsdf": DynamicSmallestDomainFirst,
     "ssdf": StaticSmallestDomainFirst,
     "smaf": StaticMostArcsFirst,
-    "dmaf": DynamicMostArcsFirst
+    "dmaf": DynamicMostArcsFirst,
+    "ddod": DynamicDomOverDeg
 }

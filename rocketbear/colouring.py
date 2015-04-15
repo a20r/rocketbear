@@ -27,6 +27,25 @@ class GraphColouringInstance(object):
         else:
             return 0
 
+    def get_number_of_edges(self):
+        """
+        Returns the total number of edges
+        """
+        return sum(len(self.edges[i]) for i in self.edges) / 2
+
+    def get_max_degree(self):
+        """
+        Returns the maximum degree
+        """
+        return max(self.degree(i) for i in self.nodes)
+
+    def get_avg_degree(self):
+        """
+        Returns the average degree
+        """
+        return sum(self.degree(i) for i in self.nodes) \
+            / float(len(self.nodes))
+
     def add_edge(self, i, j):
         """
         Adds an edge between node value i to node value j
